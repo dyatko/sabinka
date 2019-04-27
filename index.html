@@ -17,7 +17,9 @@
         overflow: hidden;
         font-family: "Schoolbell", cursive;
         -webkit-overflow-scrolling: auto;
+        overflow-scrolling: auto;
         background: black;
+        cursor: default;
       }
 
       header {
@@ -97,15 +99,41 @@
     </footer>
     <script type="text/javascript">
       function initMap() {
+        const locations = [
+          new google.maps.LatLng(59.3455897, 18.238115),
+          new google.maps.LatLng(52.528567, 13.3570712),
+          new google.maps.LatLng(63.8791259, -22.4477675)
+        ];
+
+        const markers = [];
+        const treshold = 400;
+        const whiteStar = {
+          url: "https://maps.google.com/mapfiles/kml/paddle/wht-stars.png",
+          scaledSize: {
+            width: 32,
+            height: 32
+          }
+        };
+        const redStar = {
+          url: "https://maps.google.com/mapfiles/kml/paddle/red-stars.png",
+          scaledSize: {
+            width: 32,
+            height: 32
+          }
+        };
+        const greenStar = {
+          url: "https://maps.google.com/mapfiles/kml/paddle/grn-stars.png",
+          scaledSize: {
+            width: 32,
+            height: 32
+          }
+        };
+
+        checkHints();
+
         const bounds = new google.maps.LatLngBounds();
-        bounds.extend({
-          lat: 69.4937279,
-          lng: -35.3638172
-        });
-        bounds.extend({
-          lat: 35.2098056,
-          lng: 33.0162543
-        });
+
+        locations.forEach(location => bounds.extend(location));
 
         const map = new google.maps.Map(document.querySelector("main"), {
           disableDefaultUI: true,
@@ -345,36 +373,12 @@
           document.body.className = "loaded";
         });
 
-        map.fitBounds(bounds, 0);
-
-        const locations = [
-          new google.maps.LatLng(59.3455897, 18.238115),
-          new google.maps.LatLng(52.528567, 13.3570712),
-          new google.maps.LatLng(63.8791259, -22.4477675)
-        ];
-        const markers = [];
-        const treshold = 400;
-        const whiteStar = {
-          url: "https://maps.google.com/mapfiles/kml/paddle/wht-stars.png",
-          scaledSize: {
-            width: 32,
-            height: 32
-          }
-        };
-        const redStar = {
-          url: "https://maps.google.com/mapfiles/kml/paddle/red-stars.png",
-          scaledSize: {
-            width: 32,
-            height: 32
-          }
-        };
-        const greenStar = {
-          url: "https://maps.google.com/mapfiles/kml/paddle/grn-stars.png",
-          scaledSize: {
-            width: 32,
-            height: 32
-          }
-        };
+        map.fitBounds(bounds, {
+          left: window.innerWidth / 20,
+          right: window.innerWidth / 20,
+          top: document.querySelector('header').clientHeight,
+          bottom: document.querySelector('footer').clientHeight
+        });
 
         map.addListener("click", e => {
           if (markers.length < locations.length) {
@@ -423,18 +427,18 @@
 
           let restLocations = [...locations];
 
-          const win = markers.every(marker => {
+          const win = !markers.filter(marker => {
             for (const location of restLocations) {
               if (getDistance(marker.getPosition(), location) < treshold) {
                 restLocations = restLocations.filter(loc => loc !== location);
                 marker.setIcon(greenStar);
-                return true;
+                return false;
               }
             }
 
             marker.setIcon(redStar);
-            return false;
-          });
+            return true;
+          }).length;
 
           if (win) {
             const confettiSettings = {
@@ -457,8 +461,6 @@
             document.querySelector("footer p").style.display = "block";
           }
         }
-
-        checkHints();
       }
     </script>
     <script src="./confetti.js" async type="text/javascript"></script>
