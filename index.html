@@ -1,0 +1,472 @@
+<html>
+  <head>
+    <title>Sabinka's Experiences</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Schoolbell"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body,
+      main {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: "Schoolbell", cursive;
+        -webkit-overflow-scrolling: auto;
+        background: black;
+      }
+
+      header {
+        position: fixed;
+        bottom: 100%;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        padding: 5vh;
+        font-size: 5vh;
+        pointer-events: none;
+        transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      footer {
+        position: fixed;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        padding: 2vh;
+        transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .loaded header {
+        transform: translateY(100%);
+      }
+      .loaded footer {
+        transform: translateY(-100%);
+      }
+
+      footer div,
+      footer p {
+        margin: 0 auto;
+        max-width: 420px;
+        padding: 3vh;
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 2.5vh;
+      }
+
+      footer p {
+        font-size: 4vh;
+        display: none;
+      }
+
+      canvas {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      a {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <main></main>
+    <canvas id="confetti"></canvas>
+    <header>Sabinka's Experiences</header>
+    <footer>
+      <div>
+        Mark approximate locations of&nbsp;two&nbsp;previous&nbsp;experiences
+      </div>
+      <div>Okay, one more</div>
+      <div>
+        Now, guess approximate location of&nbsp;the&nbsp;next&nbsp;experience
+      </div>
+      <p>Correct! It's <a href="https://www.bluelagoon.com/">Blue Lagoon</a></p>
+    </footer>
+    <script type="text/javascript">
+      function initMap() {
+        const bounds = new google.maps.LatLngBounds();
+        bounds.extend({
+          lat: 69.4937279,
+          lng: -35.3638172
+        });
+        bounds.extend({
+          lat: 35.2098056,
+          lng: 33.0162543
+        });
+
+        const map = new google.maps.Map(document.querySelector("main"), {
+          disableDefaultUI: true,
+          disableDoubleClickZoom: true,
+          draggable: false,
+          styles: [
+            {
+              elementType: "geometry",
+              stylers: [
+                {
+                  color: "#f5f5f5"
+                }
+              ]
+            },
+            {
+              elementType: "labels.icon",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#616161"
+                }
+              ]
+            },
+            {
+              elementType: "labels.text.stroke",
+              stylers: [
+                {
+                  color: "#f5f5f5"
+                }
+              ]
+            },
+            {
+              featureType: "administrative.land_parcel",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#bdbdbd"
+                }
+              ]
+            },
+            {
+              featureType: "administrative.neighborhood",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              featureType: "poi",
+              elementType: "geometry",
+              stylers: [
+                {
+                  color: "#eeeeee"
+                }
+              ]
+            },
+            {
+              featureType: "poi",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              featureType: "poi",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#757575"
+                }
+              ]
+            },
+            {
+              featureType: "poi.business",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              featureType: "poi.park",
+              elementType: "geometry",
+              stylers: [
+                {
+                  color: "#e5e5e5"
+                }
+              ]
+            },
+            {
+              featureType: "poi.park",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#9e9e9e"
+                }
+              ]
+            },
+            {
+              featureType: "road",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              featureType: "road",
+              elementType: "geometry",
+              stylers: [
+                {
+                  color: "#ffffff"
+                }
+              ]
+            },
+            {
+              featureType: "road",
+              elementType: "labels",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              featureType: "road",
+              elementType: "labels.icon",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              featureType: "road.arterial",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#757575"
+                }
+              ]
+            },
+            {
+              featureType: "road.highway",
+              elementType: "geometry",
+              stylers: [
+                {
+                  color: "#dadada"
+                }
+              ]
+            },
+            {
+              featureType: "road.highway",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#616161"
+                }
+              ]
+            },
+            {
+              featureType: "road.local",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#9e9e9e"
+                }
+              ]
+            },
+            {
+              featureType: "transit",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              featureType: "transit.line",
+              elementType: "geometry",
+              stylers: [
+                {
+                  color: "#e5e5e5"
+                }
+              ]
+            },
+            {
+              featureType: "transit.station",
+              elementType: "geometry",
+              stylers: [
+                {
+                  color: "#eeeeee"
+                }
+              ]
+            },
+            {
+              featureType: "water",
+              elementType: "geometry",
+              stylers: [
+                {
+                  color: "#c9c9c9"
+                }
+              ]
+            },
+            {
+              featureType: "water",
+              elementType: "labels.text",
+              stylers: [
+                {
+                  visibility: "off"
+                }
+              ]
+            },
+            {
+              featureType: "water",
+              elementType: "labels.text.fill",
+              stylers: [
+                {
+                  color: "#9e9e9e"
+                }
+              ]
+            }
+          ]
+        });
+
+        google.maps.event.addListenerOnce(map, "idle", () => {
+          document.body.className = "loaded";
+        });
+
+        map.fitBounds(bounds, 0);
+
+        const locations = [
+          new google.maps.LatLng(59.3455897, 18.238115),
+          new google.maps.LatLng(52.528567, 13.3570712),
+          new google.maps.LatLng(63.8791259, -22.4477675)
+        ];
+        const markers = [];
+        const treshold = 400;
+        const whiteStar = {
+          url: "https://maps.google.com/mapfiles/kml/paddle/wht-stars.png",
+          scaledSize: {
+            width: 32,
+            height: 32
+          }
+        };
+        const redStar = {
+          url: "https://maps.google.com/mapfiles/kml/paddle/red-stars.png",
+          scaledSize: {
+            width: 32,
+            height: 32
+          }
+        };
+        const greenStar = {
+          url: "https://maps.google.com/mapfiles/kml/paddle/grn-stars.png",
+          scaledSize: {
+            width: 32,
+            height: 32
+          }
+        };
+
+        map.addListener("click", e => {
+          if (markers.length < locations.length) {
+            const marker = new google.maps.Marker({
+              map,
+              icon: whiteStar,
+              position: e.latLng.toJSON(),
+              draggable: true
+            });
+
+            markers.push(marker);
+            marker.addListener("dragend", checkMarkers);
+          }
+
+          checkMarkers();
+          checkHints();
+        });
+
+        function checkHints() {
+          document.querySelectorAll("footer div").forEach((hint, i) => {
+            hint.style.display = i === markers.length ? "block" : "none";
+          });
+        }
+
+        var rad = function(x) {
+          return (x * Math.PI) / 180;
+        };
+
+        var getDistance = function(p1, p2) {
+          var R = 6378137; // Earth’s mean radius in meter
+          var dLat = rad(p2.lat() - p1.lat());
+          var dLong = rad(p2.lng() - p1.lng());
+          var a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(rad(p1.lat())) *
+              Math.cos(rad(p2.lat())) *
+              Math.sin(dLong / 2) *
+              Math.sin(dLong / 2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          var d = R * c;
+          return d / 1000; // returns the distance in meter
+        };
+
+        function checkMarkers() {
+          if (markers.length < locations.length) return;
+
+          let restLocations = [...locations];
+
+          const win = markers.every(marker => {
+            for (const location of restLocations) {
+              if (getDistance(marker.getPosition(), location) < treshold) {
+                restLocations = restLocations.filter(loc => loc !== location);
+                marker.setIcon(greenStar);
+                return true;
+              }
+            }
+
+            marker.setIcon(redStar);
+            return false;
+          });
+
+          if (win) {
+            const confettiSettings = {
+              target: "confetti",
+              max: "180",
+              size: "6",
+              animate: true,
+              props: ["circle", "square", "triangle", "line"],
+              colors: [
+                [165, 104, 246],
+                [230, 61, 135],
+                [0, 199, 228],
+                [253, 214, 126]
+              ],
+              clock: "100",
+              rotate: true
+            };
+            const confetti = new ConfettiGenerator(confettiSettings);
+            confetti.render();
+            document.querySelector("footer p").style.display = "block";
+          }
+        }
+
+        checkHints();
+      }
+    </script>
+    <script src="./confetti.js" async type="text/javascript"></script>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_wdfJbpY3QS4tsxNF7jJyqjc1mzn603c&callback=initMap"
+      type="text/javascript"
+    ></script>
+  </body>
+</html>
